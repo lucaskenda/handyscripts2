@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gnome-shell-extension-handyscripts2">
+	<schema path="/org/gnome/shell/extensions/handyscripts2/" id="org.gnome.shell.extensions.handyscripts2">
+		<key name="scripts-button-show" type="b">
+			<default>true</default>
+			<summary>Show scripts button in menu.</summary>
+			<description>Show a button that opens the folder where are located the scripts.</description>
+		</key>
+		<key name="scripts-folder-path" type="s">
+			<default>''</default>
+			<summary>Scripts folder path</summary>
+			<description>Script folder path.</description>
+		</key>
+	</schema>
+</schemalist>
