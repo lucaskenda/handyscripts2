@@ -2,7 +2,7 @@
 
 ![preview image](terminal.png)
 
-| ATTENTION: The previous version of **Handy Scripts** keeps the scripts in a default folder and when updated causes data loss. ! |
+| ATTENTION: The previous version of **Handy Scripts** keeps the scripts in a default folder and when updated causes data loss! |
 | --- |
 *   Handy Scripts 2 extension allows you to run your daily bash scripts easily from your desktop.
 
