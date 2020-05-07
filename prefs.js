@@ -15,10 +15,6 @@ const SCHEMA = 'org.gnome.shell.extensions.handyscripts2';
 const SCRIPTS_BUTTON_SHOWHIDE = 'scripts-button-show';
 const SCRIPTS_FOLDER_PATH = 'scripts-folder-path';
 
-const AppDir = GLib.build_filenamev(
-	[global.userdatadir, 'extensions/handyscripts2@lucaskenda.com.ar']
-);
-
 const ScriptsDir = 'scripts';
 
 let settings;
