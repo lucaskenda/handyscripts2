@@ -20,6 +20,12 @@ const SCRIPTS_BUTTON_SHOWHIDE = 'scripts-button-show';
 const SCRIPTS_DEFAULT_PATH_ENABLEDISABLE = 'scripts-default-path-enabled';
 const SCRIPTS_FOLDER_PATH = 'scripts-folder-path';
 
+function compare(a, b) {
+  if (a.name > b.name) return 1;
+  if (b.name > a.name) return -1;
+  return 0;
+}
+
 // Status menu
 const Menu = new Lang.Class({
     Name: 'Menu.Menu',
@@ -85,6 +91,7 @@ const Menu = new Lang.Class({
 
       let file, fileName;
       let folderArray = [];
+      let filesArray = [];
       let isEmpty = true;
 
       // Check if the folder hast a value.
@@ -125,13 +132,19 @@ const Menu = new Lang.Class({
 
             } else {
 
-              // Add files to menu.
+              // Push first level files to array.
               if(file.get_file_type() == Gio.FileType.REGULAR) {
 
                 if(fileName.endsWith('.sh') || fileName.endsWith('.py') || fileName.endsWith('.pyw')) {
+
                   let popupMenuItem = new PopupMenu.PopupImageMenuItem(fileName.split('.')[0], 'media-playback-start-symbolic');
                   popupMenuItem.connect('activate', this._executeScript.bind(this, this.folder + fileName));
-                  this.menu.addMenuItem(popupMenuItem);
+
+                  filesArray.push({
+                    name: fileName,
+                    popupMenuItem: popupMenuItem
+                  });
+
                   isEmpty = false;
                 }
 
@@ -140,24 +153,48 @@ const Menu = new Lang.Class({
 
           }
 
+          // Sort first level files and show in menu.
+          filesArray.sort(compare);
+
+          for(let i=0; i < filesArray.length; i++) {
+            this.menu.addMenuItem(filesArray[i].popupMenuItem);
+          }
+
+          // Sort folders.
+          folderArray.sort(compare);
+
           // For each folder list files that ends with .sh and add them to the menu array.
           for(var i=0; i < folderArray.length; i++) {
 
             dir = Gio.file_new_for_path(folderArray[i].path);
             files = dir.enumerate_children(Gio.FILE_ATTRIBUTE_STANDARD_NAME, Gio.FileQueryInfoFlags.NONE, null);
+
             let file;
+            let subfilesArray = [];
 
             while((file = files.next_file(null))) {
 
               let fileName = file.get_name();
 
               if(fileName.endsWith('.sh') || fileName.endsWith('.py') || fileName.endsWith('.pyw')) {
+
                 let popupMenuItem = new PopupMenu.PopupImageMenuItem(fileName.split('.')[0], 'media-playback-start-symbolic');
                 popupMenuItem.connect('activate', this._executeScript.bind(this, folderArray[i].path + '/' + fileName));
-                folderArray[i].submenu.menu.addMenuItem(popupMenuItem);
-                isEmpty = false;
+
+                subfilesArray.push({
+                  name: fileName,
+                  popupMenuItem: popupMenuItem
+                });
+
               }
 
+            }
+
+            // Sort second level files and show in menu.
+            subfilesArray.sort(compare);
+
+            for(let j=0; j < subfilesArray.length; j++) {
+              folderArray[i].submenu.menu.addMenuItem(subfilesArray[j].popupMenuItem);
             }
 
             this.menu.addMenuItem(folderArray[i].submenu);
