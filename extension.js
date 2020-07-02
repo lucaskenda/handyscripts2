@@ -95,7 +95,7 @@ const Menu = new Lang.Class({
       let isEmpty = true;
 
       // Check if the folder hast a value.
-			if(this._settings.get_string(SCRIPTS_FOLDER_PATH) == '') {
+      if(this._settings.get_string(SCRIPTS_FOLDER_PATH) == '') {
 
         let popupMenuItem = new PopupMenu.PopupMenuItem('You must configure a folder in GNOME Tweaks!');
         popupMenuItem.connect('activate', this._executeTweakAcces.bind(this));
@@ -153,12 +153,8 @@ const Menu = new Lang.Class({
 
           }
 
-          // Sort first level files and show in menu.
+          // Sort first level files.
           filesArray.sort(compare);
-
-          for(let i=0; i < filesArray.length; i++) {
-            this.menu.addMenuItem(filesArray[i].popupMenuItem);
-          }
 
           // Sort folders.
           folderArray.sort(compare);
@@ -199,6 +195,11 @@ const Menu = new Lang.Class({
 
             this.menu.addMenuItem(folderArray[i].submenu);
 
+          }
+
+	  // Add files to menu.
+          for(let i=0; i < filesArray.length; i++) {
+            this.menu.addMenuItem(filesArray[i].popupMenuItem);
           }
 
           if(isEmpty) {
