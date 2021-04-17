@@ -93,16 +93,6 @@ const Menu = new Lang.Class({
             '"'
         );
       } else {
-
-        global.log(          terminalCommand +
-          ' sh -c "' +
-          bashCommand +
-          " '" +
-          fileName +
-          "';" +
-          sleepCommand +
-          '"');
-
         // Bash
         Util.trySpawnCommandLine(
           terminalCommand +
