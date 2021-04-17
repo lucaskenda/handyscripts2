@@ -19,11 +19,13 @@ const DefaultFolder = GLib.build_filenamev([
 ]);
 
 const SCHEMA = "org.gnome.shell.extensions.handyscripts2";
-const SCRIPTS_BUTTON_SHOWHIDE = "scripts-button-show";
+const SCRIPTS_BUTTON_SHOW = "scripts-button-show";
+const KEEP_TERMINAL_ALIVE = "keep-terminal-alive";
 const SCRIPTS_DEFAULT_PATH_ENABLEDISABLE = "scripts-default-path-enabled";
 const SCRIPTS_FOLDER_PATH = "scripts-folder-path";
 const BASH_COMMMAND = "bash-command";
 const PYTHON_COMMMAND = "python-command";
+const TERMINAL_COMMAND = "terminal-command";
 const FILE_MANAGER = "file-manager";
 
 function compare(a, b) {
@@ -68,25 +70,49 @@ const Menu = new Lang.Class({
   _executeScript: function (fileName) {
     let bashCommand = this._settings.get_string(BASH_COMMMAND);
     let pythonCommand = this._settings.get_string(PYTHON_COMMMAND);
+    let terminalCommand = this._settings.get_string(TERMINAL_COMMAND);
+    let keepTerminalAlive = this._settings.get_boolean(KEEP_TERMINAL_ALIVE);
+    let sleepCommand = "sleep 2";
+
+    // If keep alive is true then execute sleep infinity.
+    if (keepTerminalAlive == true) {
+      sleepCommand = "sleep infinity";
+    }
 
     try {
       if (fileName.endsWith(".py") || fileName.endsWith(".pyw")) {
         // Python
         Util.trySpawnCommandLine(
-          'gnome-terminal -- sh -c "' +
+          terminalCommand +
+            ' sh -c "' +
             pythonCommand +
             " '" +
             fileName +
-            "';sleep 2\""
+            "';" +
+            sleepCommand +
+            '"'
         );
       } else {
+
+        global.log(          terminalCommand +
+          ' sh -c "' +
+          bashCommand +
+          " '" +
+          fileName +
+          "';" +
+          sleepCommand +
+          '"');
+
         // Bash
         Util.trySpawnCommandLine(
-          'gnome-terminal -- sh -c "' +
+          terminalCommand +
+            ' sh -c "' +
             bashCommand +
             " '" +
             fileName +
-            "';sleep 2\""
+            "';" +
+            sleepCommand +
+            '"'
         );
       }
     } catch (err) {
@@ -252,7 +278,7 @@ const Menu = new Lang.Class({
         }
 
         // Scripts Folder menu.
-        if (this._settings.get_boolean(SCRIPTS_BUTTON_SHOWHIDE) == true) {
+        if (this._settings.get_boolean(SCRIPTS_BUTTON_SHOW) == true) {
           this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
           let Scripts = new PopupMenu.PopupImageMenuItem(
             "Scripts",

@@ -12,10 +12,12 @@ const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 
 const SCHEMA = "org.gnome.shell.extensions.handyscripts2";
-const SCRIPTS_BUTTON_SHOWHIDE = "scripts-button-show";
+const SCRIPTS_BUTTON_SHOW = "scripts-button-show";
+const KEEP_TERMINAL_ALIVE = "keep-terminal-alive";
 const SCRIPTS_FOLDER_PATH = "scripts-folder-path";
 const BASH_COMMMAND = "bash-command";
 const PYTHON_COMMMAND = "python-command";
+const TERMINAL_COMMAND = "terminal-command";
 const FILE_MANAGER = "file-manager";
 
 const ScriptsDir = "scripts";
@@ -37,10 +39,15 @@ function buildPrefsWidget() {
   frame.set_spacing(10);
 
   let showScriptsButtonInMenuToggle = _createCheckBox(
-    SCRIPTS_BUTTON_SHOWHIDE,
+    SCRIPTS_BUTTON_SHOW,
     _("Scripts folder link in menu"),
-    _("Enable/Disable default Scripts folder path."),
-    null
+    _("Enable/Disable default Scripts folder path.")
+  );
+
+  let keepTerminalAliveToggle = _createCheckBox(
+    KEEP_TERMINAL_ALIVE,
+    _("Keep terminal alive when script ends"),
+    _("Enable/Disable pause command to keep the script terminal alive.")
   );
 
   let scriptFolderEntry = _createEntry(
@@ -54,12 +61,20 @@ function buildPrefsWidget() {
   let fileManagerEntry = _createEntry(
     FILE_MANAGER,
     _("File manager"),
-    _("File manager."),
+    _("Command to execute file manager."),
     "",
     true
   );
 
-  let bashCommand = _createEntry(
+  let terminalCommandEntry = _createEntry(
+    TERMINAL_COMMAND,
+    _("Terminal"),
+    _("Terminal to execute the script."),
+    "",
+    true
+  );
+
+  let bashCommandEntry = _createEntry(
     BASH_COMMMAND,
     _("Bash command"),
     _("Command to execute bash scripts."),
@@ -67,7 +82,7 @@ function buildPrefsWidget() {
     true
   );
 
-  let pythonCommand = _createEntry(
+  let pythonCommandEntry = _createEntry(
     PYTHON_COMMMAND,
     _("Python command"),
     _("Command to execute Python scripts."),
@@ -76,23 +91,24 @@ function buildPrefsWidget() {
   );
 
   frame.add(showScriptsButtonInMenuToggle);
+  frame.add(keepTerminalAliveToggle);
   frame.add(scriptFolderEntry);
   frame.add(fileManagerEntry);
-  frame.add(bashCommand);
-  frame.add(pythonCommand);
+  frame.add(terminalCommandEntry);
+  frame.add(bashCommandEntry);
+  frame.add(pythonCommandEntry);
   frame.show_all();
 
   return frame;
 }
 
-function _createCheckBox(key, text, tooltip, changeFunction) {
+function _createCheckBox(key, text, tooltip) {
   let box = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
   let label = new Gtk.Label({ label: text, xalign: 0, tooltip_text: tooltip });
   let widget = new Gtk.Switch({ active: settings.get_boolean(key) });
 
   widget.connect("notify::active", function (switch_widget) {
     settings.set_boolean(key, switch_widget.active);
-    changeFunction(switch_widget.active);
   });
 
   box.pack_start(label, true, true, 0);
