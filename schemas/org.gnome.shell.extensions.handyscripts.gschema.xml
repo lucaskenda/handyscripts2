@@ -14,6 +14,12 @@
 			<description>Script folder path.</description>
 		</key>
 
+		<key name="file-manager" type="s">
+			<default>"nautilus"</default>
+			<summary>File manager</summary>
+			<description>File manager.</description>
+		</key>
+
 		<key name="bash-command" type="s">
 			<default>"bash"</default>
 			<summary>Command to execute bash scripts.</summary>

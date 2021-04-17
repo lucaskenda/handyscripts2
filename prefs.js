@@ -14,8 +14,9 @@ const Convenience = Me.imports.convenience;
 const SCHEMA = "org.gnome.shell.extensions.handyscripts2";
 const SCRIPTS_BUTTON_SHOWHIDE = "scripts-button-show";
 const SCRIPTS_FOLDER_PATH = "scripts-folder-path";
-const BASH_COMMMAND = "bash-executable";
-const PYTHON_COMMMAND = "python-executable";
+const BASH_COMMMAND = "bash-command";
+const PYTHON_COMMMAND = "python-command";
+const FILE_MANAGER = "file-manager";
 
 const ScriptsDir = "scripts";
 
@@ -50,6 +51,14 @@ function buildPrefsWidget() {
     true
   );
 
+  let fileManagerEntry = _createEntry(
+    FILE_MANAGER,
+    _("File manager"),
+    _("File manager."),
+    "",
+    true
+  );
+
   let bashCommand = _createEntry(
     BASH_COMMMAND,
     _("Bash command"),
@@ -68,6 +77,7 @@ function buildPrefsWidget() {
 
   frame.add(showScriptsButtonInMenuToggle);
   frame.add(scriptFolderEntry);
+  frame.add(fileManagerEntry);
   frame.add(bashCommand);
   frame.add(pythonCommand);
   frame.show_all();

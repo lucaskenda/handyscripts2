@@ -22,8 +22,9 @@ const SCHEMA = "org.gnome.shell.extensions.handyscripts2";
 const SCRIPTS_BUTTON_SHOWHIDE = "scripts-button-show";
 const SCRIPTS_DEFAULT_PATH_ENABLEDISABLE = "scripts-default-path-enabled";
 const SCRIPTS_FOLDER_PATH = "scripts-folder-path";
-const BASH_COMMMAND = "bash-executable";
-const PYTHON_COMMMAND = "python-executable";
+const BASH_COMMMAND = "bash-command";
+const PYTHON_COMMMAND = "python-command";
+const FILE_MANAGER = "file-manager";
 
 function compare(a, b) {
   if (a.name > b.name) return 1;
@@ -102,7 +103,8 @@ const Menu = new Lang.Class({
   },
 
   _openFolder: function () {
-    Util.trySpawnCommandLine("nautilus " + this.folder);
+    let fileManager = this._settings.get_string(FILE_MANAGER);
+    Util.trySpawnCommandLine(fileManager + " '" + this.folder + "'");
   },
 
   _refreshMenu: function () {
