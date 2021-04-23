@@ -21,6 +21,10 @@
 *   Handy Scripts lists all folders and files that end with **.sh**, **.py** and **.pyc** extensions.
 *   The search is not recursive and search just one depth below.
 
+## Warning
+
+*   In case the terminal stops opening, open the extension's settings and change the "Terminal" value to `gnome-terminal --`
+
 ## Contact
 
 *   Comments, suggestions or requests to email lucaskenda@gmail.com.
